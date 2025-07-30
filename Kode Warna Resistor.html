@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kode Warna Resistor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin: auto;
+            position: relative;
+        }
+        .header-main-title {
+            text-align: center;
+            margin-bottom: 5px;
+        }
+        h1 {
+            color: #0056b3;
+            margin: 0;
+            font-size: 2.2em;
+        }
+        .author-info {
+            text-align: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 15px;
+        }
+        .author-info p {
+            margin: 0;
+            font-size: 0.9em;
+            color: #555;
+        }
+        .author-info p:first-child {
+            font-weight: bold;
+            color: #333;
+            font-size: 1em;
+        }
+        .header-image {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            z-index: 10;
+        }
+        .left-header-image {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            object-fit: cover;
+            z-index: 10;
+        }
+        h2 {
+            color: #0056b3;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="text"], input[type="number"], select {
+            width: calc(100% - 22px);
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .question {
+            margin-bottom: 20px;
+            border: 1px solid #eee;
+            padding: 15px;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .question p {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .options label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: normal;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        #timer {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #d9534f;
+            margin-bottom: 15px;
+            text-align: right;
+        }
+        #timeLimitDisplay {
+            text-align: right;
+            font-weight: bold;
+            margin-bottom: 5px;
+            margin-top: 50px;
+        }
+        #results {
+            margin-top: 30px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #e9ecef;
+            display: none;
+        }
+        .correct {
+            color: green;
+            font-weight: bold;
+        }
+        .incorrect {
+            color: red;
+            font-weight: bold;
+        }
+        .cooldown-message {
+            text-align: center;
+            font-size: 1.2em;
+            color: #d9534f;
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #d9534f;
+            border-radius: 5px;
+            background-color: #ffe0e0;
+        }
+        @media (max-width: 600px) {
+            .header-image, .left-header-image {
+                position: static;
+                margin: 10px auto;
+                display: block;
+            }
+            .header-main-title, .author-info {
+                text-align: center;
+            }
+            .container {
+                position: static;
+            }
+            #timeLimitDisplay {
+                margin-top: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header-main-title">
+            <h1>Kode Warna Resistor</h1>
+        </div>
+        <div class="author-info">
+            <p>By. Torus Manuntun Nababan, S.Pd.,M.Pd</p>
+            <p>(Pengembang Soal Kuis)</p>
+        </div>
+        <img src="logo.png" alt="Foto Torus Manuntun Nababan, S.Pd.,M.Pd" class="header-image">
+        <img src="jas.jpg" alt="Ilustrasi Jas" class="left-header-image">
+
+        <p id="timeLimitDisplay">Waktu pengerjaan: <span id="timeLimit">40</span> menit</p>
+        <div id="timer">Waktu tersisa: 40:00</div>
+
+        <form id="quizForm">
+            <h2>Identitas Siswa</h2>
+            <div class="form-group">
+                <label for="sekolah">Nama Sekolah:</label>
+                <input type="text" id="sekolah" name="sekolah" required>
+            </div>
+            <div class="form-group">
+                <label for="nama">Nama Siswa:</label>
+                <input type="text" id="nama" name="nama" required>
+            </div>
+            <div class="form-group">
+                <label for="kelas">Kelas:</label>
+                <input type="text" id="kelas" name="kelas" required>
+            </div>
+            <div class="form-group">
+                <label for="semester">Semester:</label>
+                <select id="semester" name="semester" required>
+                    <option value="">Pilih Semester</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="tahunAjaran">Tahun Ajaran:</label>
+                <input type="text" id="tahunAjaran" name="tahunAjaran" placeholder="Contoh: 2024/2025" required>
+            </div>
+
+            <hr>
+
+            <h2>Soal Kuis</h2>
+            <div id="questionsContainer">
+            </div>
+
+            <button type="submit">Selesai Kuis</button>
+        </form>
+
+        <div id="results">
+            <h2>Hasil Kuis</h2>
+            <p><strong>Nama Siswa:</strong> <span id="resultNama"></span></p>
+            <p><strong>Skor Anda:</strong> <span id="score"></span></p>
+            <p id="message"></p>
+            <h3>Detail Jawaban:</h3>
+            <div id="answerDetails">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const colorCodes = {
+            'Hitam': { digit: 0, multiplier: 1, tolerance: null },
+            'Coklat': { digit: 1, multiplier: 10, tolerance: 1 },
+            'Merah': { digit: 2, multiplier: 100, tolerance: 2 },
+            'Jingga': { digit: 3, multiplier: 1000, tolerance: null },
+            'Kuning': { digit: 4, multiplier: 10000, tolerance: null },
+            'Hijau': { digit: 5, multiplier: 100000, tolerance: 0.5 },
+            'Biru': { digit: 6, multiplier: 1000000, tolerance: 0.25 },
+            'Ungu': { digit: 7, multiplier: 10000000, tolerance: 0.1 },
+            'Abu-abu': { digit: 8, multiplier: 100000000, tolerance: 0.05 },
+            'Putih': { digit: 9, multiplier: 1000000000, tolerance: null },
+            'Emas': { digit: null, multiplier: 0.1, tolerance: 5 },
+            'Perak': { digit: null, multiplier: 0.01, tolerance: 10 },
+            'Tidak Berwarna': { digit: null, multiplier: null, tolerance: 20 }
+        };
+
+        const digitColors = ['Hitam', 'Coklat', 'Merah', 'Jingga', 'Kuning', 'Hijau', 'Biru', 'Ungu', 'Abu-abu', 'Putih'];
+        const multiplierColors = ['Hitam', 'Coklat', 'Merah', 'Jingga', 'Kuning', 'Hijau', 'Biru', 'Ungu', 'Abu-abu', 'Putih', 'Emas', 'Perak'];
+        const toleranceColors = ['Coklat', 'Merah', 'Hijau', 'Biru', 'Ungu', 'Abu-abu', 'Emas', 'Perak', 'Tidak Berwarna'];
+
+        function getRandomElement(arr) {
+            return arr[Math.floor(Math.random() * arr.length)];
+        }
+
+        // Function to format resistance values (e.g., 100000 to 100k, 1000000 to 1M)
+        function formatResistance(ohms) {
+            if (ohms >= 1000000) {
+                return (ohms / 1000000).toFixed(1).replace(/\.0$/, '') + 'MΩ';
+            } else if (ohms >= 1000) {
+                return (ohms / 1000).toFixed(1).replace(/\.0$/, '') + 'kΩ';
+            } else {
+                return ohms + 'Ω';
+            }
+        }
+
+        // --- Question Type 1: Colors to Resistance ---
+        function generateColorsToResistanceQuestion() {
+            const band1Color = getRandomElement(digitColors.slice(1)); // First band cannot be Black (0)
+            const band2Color = getRandomElement(digitColors);
+            const band3Color = getRandomElement(multiplierColors);
+            const band4Color = getRandomElement(toleranceColors);
+
+            const digit1 = colorCodes[band1Color].digit;
+            const digit2 = colorCodes[band2Color].digit;
+            const multiplier = colorCodes[band3Color].multiplier;
+            const tolerance = colorCodes[band4Color].tolerance;
+
+            const resistanceValue = (digit1 * 10 + digit2) * multiplier;
+            const formattedResistance = formatResistance(resistanceValue);
+            const formattedTolerance = `±${tolerance}%`;
+
+            const correctAnswer = `${formattedResistance} ${formattedTolerance}`;
+
+            const questionText = `Berapakah nilai resistansi dari resistor dengan kode warna **${band1Color}**, **${band2Color}**, **${band3Color}**, dan **${band4Color}**?`;
+
+            const options = new Set();
+            options.add(correctAnswer);
+
+            while (options.size < 4) {
+                let faultyDigit1 = getRandomElement(digitColors.slice(1));
+                let faultyDigit2 = getRandomElement(digitColors);
+                let faultyMultiplierColor = getRandomElement(multiplierColors);
+                let faultyToleranceColor = getRandomElement(toleranceColors);
+
+                let faultyValue = (colorCodes[faultyDigit1].digit * 10 + colorCodes[faultyDigit2].digit) * colorCodes[faultyMultiplierColor].multiplier;
+                let faultyTol = colorCodes[faultyToleranceColor].tolerance;
+
+                // Ensure some variation from correct answer
+                if (Math.random() < 0.5) { // Vary value
+                    options.add(`${formatResistance(faultyValue)} ±${faultyTol}%`);
+                } else { // Vary tolerance only
+                    options.add(`${formattedResistance} ±${faultyTol}%`);
+                }
+            }
+
+            return {
+                question: questionText,
+                options: Array.from(options),
+                answer: correctAnswer
+            };
+        }
+
+        // --- Question Type 2: Resistance to Colors ---
+        function generateResistanceToColorsQuestion() {
+            let resistanceValue;
+            let toleranceValue;
+            let band1, band2, multiplierBand, toleranceBand;
+
+            // Generate a random resistance value and tolerance
+            const possibleTolerances = [1, 2, 0.5, 0.25, 0.1, 0.05, 5, 10, 20];
+            toleranceValue = getRandomElement(possibleTolerances);
+            toleranceBand = Object.keys(colorCodes).find(key => colorCodes[key].tolerance === toleranceValue);
+
+            while (!toleranceBand || (toleranceBand === 'Tidak Berwarna' && Math.random() < 0.3)) { // Make "Tidak Berwarna" less common
+                 toleranceValue = getRandomElement(possibleTolerances);
+                 toleranceBand = Object.keys(colorCodes).find(key => colorCodes[key].tolerance === toleranceValue);
+            }
+
+            // Generate resistance that can be represented by 2 digits and a multiplier
+            let firstDigit = Math.floor(Math.random() * 9) + 1; // 1-9
+            let secondDigit = Math.floor(Math.random() * 10); // 0-9
+            band1 = digitColors[firstDigit];
+            band2 = digitColors[secondDigit];
+
+            let baseValue = firstDigit * 10 + secondDigit;
+            
+            // Randomly select a multiplier band that is not too extreme
+            let selectedMultiplierColor;
+            const commonMultipliers = ['Hitam', 'Coklat', 'Merah', 'Jingga', 'Kuning', 'Hijau', 'Biru', 'Emas', 'Perak'];
+            selectedMultiplierColor = getRandomElement(commonMultipliers);
+            multiplierBand = selectedMultiplierColor;
+            
+            resistanceValue = baseValue * colorCodes[multiplierBand].multiplier;
+
+            const formattedResistance = formatResistance(resistanceValue);
+            const questionText = `Warna kode resistor untuk nilai resistansi **${formattedResistance}** dengan toleransi **±${toleranceValue}%** adalah...`;
+
+            const correctAnswer = `${band1}, ${band2}, ${multiplierBand}, ${toleranceBand}`;
+
+            const options = new Set();
+            options.add(correctAnswer);
+
+            while (options.size < 4) {
+                let faultyBand1 = getRandomElement(digitColors.slice(1));
+                let faultyBand2 = getRandomElement(digitColors);
+                let faultyMultiplierBand = getRandomElement(multiplierColors);
+                let faultyToleranceBand = getRandomElement(toleranceColors);
+
+                // Ensure options are distinct and not the correct answer
+                let faultyOption = `${faultyBand1}, ${faultyBand2}, ${faultyMultiplierBand}, ${faultyToleranceBand}`;
+                if (faultyOption !== correctAnswer) {
+                    options.add(faultyOption);
+                }
+            }
+            return {
+                question: questionText,
+                options: Array.from(options),
+                answer: correctAnswer
+            };
+        }
+        
+        // Array to hold the dynamically generated questions
+        let generatedQuestions = [];
+
+        // Function to generate and display questions
+        function generateQuizQuestions() {
+            generatedQuestions = [];
+            for (let i = 0; i < 40; i++) {
+                if (Math.random() < 0.5) {
+                    generatedQuestions.push(generateColorsToResistanceQuestion());
+                } else {
+                    generatedQuestions.push(generateResistanceToColorsQuestion());
+                }
+            }
+            shuffleArray(generatedQuestions); // Shuffle the entire list of questions
+
+            questionsContainer.innerHTML = '';
+            generatedQuestions.forEach((q, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.classList.add('question');
+
+                const shuffledOptions = [...q.options];
+                shuffleArray(shuffledOptions); // Shuffle options for each question
+
+                questionDiv.innerHTML = `
+                    <p>${index + 1}. ${q.question}</p>
+                    <div class="options">
+                        ${shuffledOptions.map((option) => `
+                            <label>
+                                <input type="radio" name="q${index}" value="${option}"> ${option}
+                            </label>
+                        `).join('')}
+                    </div>
+                `;
+                questionsContainer.appendChild(questionDiv);
+            });
+        }
+
+        const timeLimitInMinutes = 40;
+        let timeLeft = timeLimitInMinutes * 60; // seconds
+        let timerInterval;
+
+        const quizForm = document.getElementById('quizForm');
+        const questionsContainer = document.getElementById('questionsContainer');
+        const timerDisplay = document.getElementById('timer');
+        const resultsDiv = document.getElementById('results');
+        const resultNama = document.getElementById('resultNama');
+        const scoreDisplay = document.getElementById('score');
+        const messageDisplay = document.getElementById('message');
+        const answerDetailsDiv = document.getElementById('answerDetails');
+
+        // Durasi cooldown: 3 jam dalam milidetik
+        const cooldownDuration = 3 * 60 * 60 * 1000;
+        const lastQuizCompletionKey = 'lastQuizCompletionTime';
+
+        // Fungsi untuk mengacak array (algoritma Fisher-Yates)
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        // Fungsi untuk memulai timer
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                timerDisplay.textContent = `Waktu tersisa: ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    alert("Waktu habis! Kuis akan otomatis disubmit.");
+                    quizForm.dispatchEvent(new Event('submit'));
+                }
+                timeLeft--;
+            }, 1000);
+        }
+
+        // Penanganan saat formulir disubmit
+        quizForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            clearInterval(timerInterval);
+
+            let totalScore = 0;
+            const pointsPerCorrect = 100 / generatedQuestions.length; // Calculate points per question based on total of 40 questions
+            const maxPossibleScore = generatedQuestions.length * pointsPerCorrect; // 40 * 2.5 = 100
+
+            const answers = {};
+
+            generatedQuestions.forEach((q, index) => {
+                const selectedOption = document.querySelector(`input[name="q${index}"]:checked`);
+                const userAnswer = selectedOption ? selectedOption.value : null;
+                answers[`q${index}`] = userAnswer;
+
+                if (userAnswer === q.answer) {
+                    totalScore += pointsPerCorrect;
+                }
+            });
+
+            // Simpan waktu penyelesaian kuis ke Local Storage
+            localStorage.setItem(lastQuizCompletionKey, Date.now());
+
+            // Tampilkan hasil
+            resultNama.textContent = document.getElementById('nama').value;
+            scoreDisplay.textContent = `${totalScore.toFixed(2)} / ${maxPossibleScore}`;
+
+            // Tentukan pesan berdasarkan skor
+            if (totalScore >= 70) {
+                messageDisplay.textContent = "Selamat Anda Pemenang";
+                messageDisplay.style.color = "green";
+            } else {
+                messageDisplay.textContent = "Anda Belum Beruntung, Belajar Lagi Ya";
+                messageDisplay.style.color = "red";
+            }
+
+            // Tampilkan detail jawaban
+            answerDetailsDiv.innerHTML = '';
+            generatedQuestions.forEach((q, index) => {
+                const userAnswer = answers[`q${index}`];
+                const detailDiv = document.createElement('p');
+                let answerStatusClass = '';
+                let userAnswerText = userAnswer !== null ? userAnswer : 'Tidak dijawab';
+
+                if (userAnswer === q.answer) {
+                    answerStatusClass = 'correct';
+                } else if (userAnswer !== null) {
+                    answerStatusClass = 'incorrect';
+                } else {
+                    answerStatusClass = '';
+                }
+
+                detailDiv.innerHTML = `
+                    <strong>${index + 1}. ${q.question}</strong><br>
+                    Jawaban Anda: <span class="${answerStatusClass}">
+                        ${userAnswerText}
+                    </span><br>
+                    Kunci Jawaban: <span class="correct">${q.answer}</span>
+                `;
+                answerDetailsDiv.appendChild(detailDiv);
+            });
+
+            quizForm.style.display = 'none';
+            resultsDiv.style.display = 'block';
+        });
+
+        // Inisialisasi kuis dan cek cooldown saat halaman dimuat
+        window.onload = function() {
+            const lastCompletionTime = localStorage.getItem(lastQuizCompletionKey);
+            if (lastCompletionTime) {
+                const timeElapsed = Date.now() - parseInt(lastCompletionTime);
+                if (timeElapsed < cooldownDuration) {
+                    const remainingTime = cooldownDuration - timeElapsed;
+                    const minutes = Math.floor(remainingTime / (1000 * 60));
+                    const seconds = Math.floor((remainingTime % (1000 * 60)) / 1000);
+
+                    quizForm.style.display = 'none';
+                    timerDisplay.style.display = 'none';
+                    document.getElementById('timeLimitDisplay').style.display = 'none';
+                    const cooldownMessageDiv = document.createElement('div');
+                    cooldownMessageDiv.classList.add('cooldown-message');
+                    cooldownMessageDiv.innerHTML = `
+                        Anda telah menyelesaikan kuis ini. <br>
+                        Silakan coba lagi dalam **${minutes.toString().padStart(2, '0')} menit dan ${seconds.toString().padStart(2, '0')} detik**.
+                    `;
+                    document.querySelector('.container').insertBefore(cooldownMessageDiv, document.getElementById('quizForm'));
+                    return;
+                }
+            }
+            // Jika tidak ada cooldown atau cooldown sudah berakhir, inisialisasi kuis
+            generateQuizQuestions(); // Call the new function to generate questions
+            startTimer();
+        };
+    </script>
+</body>
+</html>
